@@ -2,6 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from bs4 import BeautifulSoup
 import requests
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 # Create your views here.
 
 def index(request):
@@ -14,7 +20,62 @@ def yt(request):
         request,
         './yt.html'
     )
+def twinge(request):
+    return render(
+        request,
+        './twinge.html'
+    )
+def twingedata(request):
+    if 'q' in request.GET:
+        parse = request.GET['q']
+        sort = parse.split(",")
+        num = len(sort)
+        names = []
+        games = []
+        zipped = []
+        times = []
+        data= []
+        timeout = 10
+        options = webdriver.ChromeOptions()
+        # options.add_argument('headless')
+        driver = webdriver.Chrome(chrome_options=options)
+        for link in range(num):
+            url = "http://twinge.tv/channels/"+sort[link]+"/games/#/7" #http://twinge.tv/channels/lirik/games/#/5
+            names.append(link)
+            x = 5
+            while x > 0:
+                driver.get("http://twinge.tv/channels/lirik/")
+                try:
+                    driver.get(url)
+                    element_present = EC.presence_of_element_located((By.CLASS_NAME, 'gameMenu'))
+                    WebDriverWait(driver, timeout).until(element_present)
+                    x = 0
 
+                except TimeoutException:
+                    print("Timed out waiting for page to load")
+                    x = x - 1
+            driver.implicitly_wait(3)
+            game_elements = driver.find_elements_by_css_selector('.channelAllGames__game.ng-binding')
+            count = 0
+            pointer = 0
+            for elements in game_elements:
+                text = elements.text
+                game_name = text.split("\n")[0]
+                if game_name == "H1Z1":
+                    pointer = count
+                count += 1
+            game = game_elements[pointer].text.split("\n")[0]
+            games.append(game)
+            time_elements = driver.find_elements_by_css_selector('.u-tac.channelAllGames__hover')
+            time = time_elements[pointer].text
+            times.append(time)
+    zipped = zip(games,names,times)
+    driver.quit()
+    return render(
+        request,
+        'twingedata.html',
+        context={'zipped':zipped },
+    )
 def youtube(request):
     if 'q' in request.GET:
         parse = request.GET['q']
