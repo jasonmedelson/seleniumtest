@@ -37,7 +37,7 @@ def twingedata(request):
         data= []
         timeout = 10
         options = webdriver.ChromeOptions()
-        # options.add_argument('headless')
+        options.add_argument('headless')
         driver = webdriver.Chrome(chrome_options=options)
         for link in range(num):
             url = "http://twinge.tv/channels/"+sort[link]+"/games/#/7" #http://twinge.tv/channels/lirik/games/#/5

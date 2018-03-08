@@ -17,6 +17,7 @@ django-heroku = "*"
 gunicorn = "*"
 bs4 = "*"
 requests = "*"
+selenium = "*"
 
 
 [dev-packages]
