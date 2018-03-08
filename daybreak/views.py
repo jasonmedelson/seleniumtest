@@ -8,6 +8,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+import os
 # Create your views here.
 
 def index(request):
@@ -37,6 +38,8 @@ def twingedata(request):
         data= []
         timeout = 10
         chrome_options = Options()#heroku setting
+        GOOGLE_CHROME_BIN = os.environ.get('GOOGLE_CHROME_BIN')
+        CHROMEDRIVER_PATH = os.environ.get('CHROMEDRIVER_PATH')
         chrome_options.binary_location = GOOGLE_CHROME_BIN#heroku setting
         chrome_options.add_argument('--disable-gpu')#heroku setting
         chrome_options.add_argument('--no-sandbox')#heroku setting
