@@ -36,9 +36,14 @@ def twingedata(request):
         times = []
         data= []
         timeout = 10
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        driver = webdriver.Chrome(chrome_options=options)
+        chrome_options = Options()#heroku setting
+        chrome_options.binary_location = GOOGLE_CHROME_BIN#heroku setting
+        chrome_options.add_argument('--disable-gpu')#heroku setting
+        chrome_options.add_argument('--no-sandbox')#heroku setting
+        driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)#heroku setting
+        # options = webdriver.ChromeOptions() #local setting
+        # options.add_argument('headless') #local setting
+        # driver = webdriver.Chrome(chrome_options=options) #local setting
         for link in range(num):
             url = "http://twinge.tv/channels/"+sort[link]+"/games/#/7" #http://twinge.tv/channels/lirik/games/#/5
             names.append(link)
