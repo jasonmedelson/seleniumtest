@@ -43,6 +43,7 @@ def twingedata(request):
         chrome_options.binary_location = GOOGLE_CHROME_BIN#heroku setting
         chrome_options.add_argument('--disable-gpu')#heroku setting
         chrome_options.add_argument('--no-sandbox')#heroku setting
+        chrome_options.add_argument("headless")
         driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)#heroku setting
         # options = webdriver.ChromeOptions() #local setting
         # options.add_argument('headless') #local setting
